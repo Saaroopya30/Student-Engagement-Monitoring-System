@@ -1,0 +1,52 @@
+{
+  "total_records": 1175,
+  "label_counts": {
+    "Partially Engaged": 957,
+    "Engaged": 161,
+    "Not Engaged": 57
+  },
+  "student_count": 4,
+  "students": {
+    "1": {
+      "Partially Engaged": 327,
+      "Engaged": 58
+    },
+    "2": {
+      "Partially Engaged": 307,
+      "Engaged": 57,
+      "Not Engaged": 21
+    },
+    "3": {
+      "Partially Engaged": 323,
+      "Not Engaged": 16,
+      "Engaged": 46
+    },
+    "4": {
+      "Not Engaged": 20
+    }
+  },
+  "overall_engaged_percentage": 13.7,
+  "overall_attention_score_percentage": 54.43,
+  "student_percentages": {
+    "1": {
+      "engaged_percentage": 15.06,
+      "attention_score_percentage": 57.53,
+      "total_detections": 385
+    },
+    "2": {
+      "engaged_percentage": 14.81,
+      "attention_score_percentage": 54.68,
+      "total_detections": 385
+    },
+    "3": {
+      "engaged_percentage": 11.95,
+      "attention_score_percentage": 53.9,
+      "total_detections": 385
+    },
+    "4": {
+      "engaged_percentage": 0.0,
+      "attention_score_percentage": 0.0,
+      "total_detections": 20
+    }
+  }
+}

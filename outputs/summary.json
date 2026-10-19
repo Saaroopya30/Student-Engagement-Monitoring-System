@@ -1,0 +1,16 @@
+{
+  "total_records": 661,
+  "label_counts": {
+    "Partially Engaged": 605,
+    "Not Engaged": 50,
+    "Engaged": 6
+  },
+  "student_count": 1,
+  "students": {
+    "1": {
+      "Partially Engaged": 605,
+      "Not Engaged": 50,
+      "Engaged": 6
+    }
+  }
+}

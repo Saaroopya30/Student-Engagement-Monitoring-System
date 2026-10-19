@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Analyzing Video</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <main class="page-shell progress-shell">
+    <a class="back-link" href="{{ url_for('index') }}">Back to Upload</a>
+    <section class="progress-card">
+      <p class="eyebrow">Video Analysis In Progress</p>
+      <h1 id="job-title">Preparing analysis...</h1>
+      <p class="hero-text" id="job-message">Your classroom video is being processed.</p>
+      <div class="stage-pill" id="job-stage">Queued</div>
+
+      <div class="progress-bar-shell">
+        <div class="progress-bar-fill" id="progress-fill" style="width: 0%;"></div>
+      </div>
+
+      <div class="progress-stats">
+        <div class="stat-card">
+          <span>Status</span>
+          <strong id="job-state">Queued</strong>
+        </div>
+        <div class="stat-card">
+          <span>Progress</span>
+          <strong id="job-percent">0%</strong>
+        </div>
+        <div class="stat-card">
+          <span>Frames</span>
+          <strong id="job-frames">0 / 0</strong>
+        </div>
+        <div class="stat-card">
+          <span>ETA</span>
+          <strong id="job-eta">Calculating...</strong>
+        </div>
+      </div>
+
+      <div class="progress-actions">
+        <button type="button" id="cancel-button">Cancel Analysis</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const runId = "{{ run_id }}";
+    const statusUrl = "{{ url_for('status', run_id=run_id) }}";
+    const cancelUrl = "{{ url_for('cancel', run_id=run_id) }}";
+    const resultUrl = "{{ url_for('result', run_id=run_id) }}";
+    const cancelButton = document.getElementById("cancel-button");
+
+    function formatEta(seconds) {
+      if (seconds === null || seconds === undefined) {
+        return "Calculating...";
+      }
+      if (seconds <= 0) {
+        return "Almost done";
+      }
+      const mins = Math.floor(seconds / 60);
+      const secs = seconds % 60;
+      if (mins > 0) {
+        return `${mins}m ${secs}s`;
+      }
+      return `${secs}s`;
+    }
+
+    async function pollStatus() {
+      const response = await fetch(statusUrl, { cache: "no-store" });
+      const data = await response.json();
+
+      document.getElementById("job-title").textContent = data.original_filename || "Uploaded video";
+      document.getElementById("job-message").textContent = data.message || "Processing...";
+      document.getElementById("job-state").textContent = data.state || "processing";
+      document.getElementById("job-stage").textContent = data.stage_label || "Processing";
+      document.getElementById("job-percent").textContent = `${data.percent || 0}%`;
+      document.getElementById("job-frames").textContent = `${data.processed_frames || 0} / ${data.total_frames || 0}`;
+      document.getElementById("job-eta").textContent = formatEta(data.eta_seconds);
+      document.getElementById("progress-fill").style.width = `${data.percent || 0}%`;
+
+      if (data.state === "completed") {
+        window.location.href = resultUrl;
+        return;
+      }
+
+      if (data.state === "failed" || data.state === "cancelled") {
+        document.getElementById("job-state").textContent = data.stage_label || data.state;
+        document.getElementById("progress-fill").classList.add("progress-failed");
+        cancelButton.disabled = true;
+        cancelButton.textContent = data.state === "cancelled" ? "Analysis Cancelled" : "Analysis Failed";
+        return;
+      }
+
+      if (data.state === "cancelling") {
+        cancelButton.disabled = true;
+        cancelButton.textContent = "Cancelling...";
+      } else if (data.cancel_requested) {
+        cancelButton.disabled = true;
+        cancelButton.textContent = "Cancellation Requested";
+      }
+
+      window.setTimeout(pollStatus, 1500);
+    }
+
+    cancelButton.addEventListener("click", async () => {
+      cancelButton.disabled = true;
+      cancelButton.textContent = "Cancelling...";
+      await fetch(cancelUrl, { method: "POST" });
+      pollStatus();
+    });
+
+    pollStatus();
+  </script>
+</body>
+</html>

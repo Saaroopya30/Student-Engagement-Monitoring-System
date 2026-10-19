@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Analysis Result</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <main class="page-shell result-shell">
+    <a class="back-link" href="{{ url_for('index') }}">Back to Upload</a>
+    <section class="result-hero">
+      <div>
+        <p class="eyebrow">Analysis Complete</p>
+        <h1>{{ metadata.original_filename }}</h1>
+        <p class="hero-text">{{ metadata.processed_frames }} frames processed through the engagement pipeline.</p>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card"><span>Students</span><strong>{{ summary.student_count }}</strong></div>
+        <div class="stat-card"><span>Engaged %</span><strong>{{ summary.overall_engaged_percentage }}%</strong></div>
+        <div class="stat-card"><span>Attention Score</span><strong>{{ summary.overall_attention_score_percentage }}%</strong></div>
+        <div class="stat-card"><span>Engaged</span><strong>{{ summary.label_counts.get('Engaged', 0) }}</strong></div>
+        <div class="stat-card"><span>Partial</span><strong>{{ summary.label_counts.get('Partially Engaged', 0) }}</strong></div>
+        <div class="stat-card"><span>Not Engaged</span><strong>{{ summary.label_counts.get('Not Engaged', 0) }}</strong></div>
+      </div>
+    </section>
+
+    <section class="media-layout">
+      <div class="video-card">
+        <h2>Annotated Video</h2>
+        <video controls playsinline preload="metadata" width="100%">
+          <source src="{{ url_for('files', run_id=run_id, filename='annotated.mp4') }}" type="video/mp4">
+          Your browser could not play the annotated video inline.
+        </video>
+        <p class="hint">If the preview does not play in your browser, use the download link on the right to open the annotated video directly.</p>
+      </div>
+      <div class="download-card">
+        <h2>Downloads</h2>
+        <a href="{{ url_for('files', run_id=run_id, filename='annotated.mp4') }}">Annotated Video</a>
+        <a href="{{ url_for('files', run_id=run_id, filename='engagement_results.csv') }}">CSV Log</a>
+        <a href="{{ url_for('files', run_id=run_id, filename='engagement_results.db') }}">SQLite Database</a>
+        <a href="{{ url_for('files', run_id=run_id, filename='student_summary.csv') }}">Student Summary</a>
+        <a href="{{ url_for('files', run_id=run_id, filename='summary.json') }}">Summary JSON</a>
+        <a href="{{ url_for('files', run_id=run_id, filename='dashboard.html') }}">Standalone Dashboard</a>
+      </div>
+    </section>
+
+    <section class="charts-grid">
+      <article class="chart-card">
+        <h2>Engagement Trend</h2>
+        <img src="{{ url_for('files', run_id=run_id, filename='engagement_trend.png') }}" alt="Engagement trend chart">
+      </article>
+      <article class="chart-card">
+        <h2>Engagement Distribution</h2>
+        <img src="{{ url_for('files', run_id=run_id, filename='engagement_distribution.png') }}" alt="Engagement distribution chart">
+      </article>
+    </section>
+
+    <section class="table-card">
+      <h2>Per Student Summary</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Track ID</th>
+            <th>Engaged</th>
+            <th>Partially Engaged</th>
+            <th>Not Engaged</th>
+            <th>Engaged %</th>
+            <th>Attention Score %</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for student_id, counts in summary.students.items() %}
+          <tr>
+            <td>{{ student_id }}</td>
+            <td>{{ counts.get('Engaged', 0) }}</td>
+            <td>{{ counts.get('Partially Engaged', 0) }}</td>
+            <td>{{ counts.get('Not Engaged', 0) }}</td>
+            <td>{{ summary.student_percentages.get(student_id, {}).get('engaged_percentage', 0) }}%</td>
+            <td>{{ summary.student_percentages.get(student_id, {}).get('attention_score_percentage', 0) }}%</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,23 @@
+{
+  "total_records": 221,
+  "label_counts": {
+    "Not Engaged": 35,
+    "Partially Engaged": 186
+  },
+  "student_count": 1,
+  "students": {
+    "1": {
+      "Not Engaged": 35,
+      "Partially Engaged": 186
+    }
+  },
+  "overall_engaged_percentage": 0.0,
+  "overall_attention_score_percentage": 42.08,
+  "student_percentages": {
+    "1": {
+      "engaged_percentage": 0.0,
+      "attention_score_percentage": 42.08,
+      "total_detections": 221
+    }
+  }
+}

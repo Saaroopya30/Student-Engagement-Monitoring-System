@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Student Engagement Monitoring System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <main class="page-shell">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Offline Classroom Analytics</p>
+        <h1>Upload a recorded classroom video and generate engagement reports in one place.</h1>
+        <p class="hero-text">
+          This Flask dashboard runs the student engagement pipeline on an offline video,
+          creates an annotated result, stores structured logs, and renders charts for educators.
+        </p>
+      </div>
+      <div class="upload-card">
+        <h2>Start Analysis</h2>
+        <form action="{{ url_for('analyze') }}" method="post" enctype="multipart/form-data">
+          <label class="file-field">
+            <span>Select a video</span>
+            <input type="file" name="video" accept=".mp4,.avi,.mov,.mkv" required>
+          </label>
+          <button type="submit">Analyze Video</button>
+        </form>
+        <p class="hint">Supported formats: MP4, AVI, MOV, MKV</p>
+      </div>
+    </section>
+
+    <section class="feature-grid">
+      <article class="feature-card">
+        <h3>Annotated Output</h3>
+        <p>Color-coded boxes, track IDs, live engagement percentage, and educator feedback overlay.</p>
+      </article>
+      <article class="feature-card">
+        <h3>Structured Reports</h3>
+        <p>SQLite database, CSV logs, per-student summary, trend chart, and distribution chart.</p>
+      </article>
+      <article class="feature-card">
+        <h3>Web Results</h3>
+        <p>Open a result page to review the processed video and download all generated artifacts.</p>
+      </article>
+    </section>
+
+    <section class="recent-section">
+      <div class="section-head">
+        <p class="eyebrow">Recent Runs</p>
+        <h2>Previously analyzed videos</h2>
+      </div>
+      <div class="recent-grid">
+        {% for run in recent_runs %}
+        <a class="recent-card" href="{{ url_for('result', run_id=run.run_id) }}">
+          <strong>{{ run.metadata.original_filename }}</strong>
+          <span>{{ run.metadata.processed_frames }} frames processed</span>
+          <span>Students tracked: {{ run.summary.student_count }}</span>
+        </a>
+        {% else %}
+        <div class="empty-state">No web runs yet. Upload a classroom video to create the first dashboard.</div>
+        {% endfor %}
+      </div>
+    </section>
+  </main>
+</body>
+</html>

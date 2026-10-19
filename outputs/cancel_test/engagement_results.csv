@@ -1,0 +1,2 @@
+frame_index,timestamp_seconds,track_id,label,head_centered,hand_raised,upright_posture,face_detected,excessive_movement,movement_score
+1,0.0,1,Partially Engaged,1,0,0,1,0,0.0

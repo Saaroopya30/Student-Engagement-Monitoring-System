@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Student Engagement Dashboard</title>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 32px;
+      background: linear-gradient(135deg, #f7f4ea 0%, #dde8f5 100%);
+      color: #1f2933;
+    }
+    h1, h2 { margin: 0 0 12px; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.88);
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 10px 30px rgba(31, 41, 51, 0.08);
+    }
+    img {
+      max-width: 100%;
+      border-radius: 14px;
+      margin-top: 12px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #d9e2ec;
+      text-align: left;
+    }
+    th { background: #102a43; color: white; }
+  </style>
+</head>
+<body>
+  <h1>Student Engagement Dashboard</h1>
+  <p>Generated classroom analytics based on the processed input video.</p>
+    <div class="grid">
+    <div class="card"><h2>Total Records</h2><p>1175</p></div>
+    <div class="card"><h2>Students Tracked</h2><p>4</p></div>
+    <div class="card"><h2>Engaged %</h2><p>13.7%</p></div>
+    <div class="card"><h2>Attention Score %</h2><p>54.43%</p></div>
+    <div class="card"><h2>Engaged</h2><p>161</p></div>
+    <div class="card"><h2>Partially Engaged</h2><p>957</p></div>
+    <div class="card"><h2>Not Engaged</h2><p>57</p></div>
+  </div>
+  <div class="grid">
+    <div class="card">
+      <h2>Trend Report</h2>
+      <img src="engagement_trend.png" alt="Engagement trend chart">
+    </div>
+    <div class="card">
+      <h2>Distribution Report</h2>
+      <img src="engagement_distribution.png" alt="Engagement distribution chart">
+    </div>
+  </div>
+  <div class="card">
+    <h2>Per Student Summary</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Track ID</th>
+          <th>Engaged</th>
+          <th>Partially Engaged</th>
+          <th>Not Engaged</th>
+          <th>Engaged %</th>
+          <th>Attention Score %</th>
+          <th>Dominant Label</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>58</td><td>327</td><td>0</td><td>15.06%</td><td>57.53%</td><td>Partially Engaged</td></tr><tr><td>2</td><td>57</td><td>307</td><td>21</td><td>14.81%</td><td>54.68%</td><td>Partially Engaged</td></tr><tr><td>3</td><td>46</td><td>323</td><td>16</td><td>11.95%</td><td>53.9%</td><td>Partially Engaged</td></tr><tr><td>4</td><td>0</td><td>0</td><td>20</td><td>0.0%</td><td>0.0%</td><td>Not Engaged</td></tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
